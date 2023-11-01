@@ -25,31 +25,12 @@ const startApp = () => {
   const ambientLight = new THREE.AmbientLight('#ffffff', 0.2)
   scene.add(dirLight, ambientLight)
 
-
-
-
-
-
-
-
-
-
-
   // meshes
   const geometry = new THREE.IcosahedronGeometry(1, 5)
-  const material = new THREE.MeshStandardMaterial()
+  const material = new THREE.ShaderMaterial()
 
   const ico = new THREE.Mesh(geometry, material)
   scene.add(ico)
-
-
-
-
-
-
-
-
-
 
   // GUI
   const cameraFolder = gui.addFolder('Camera')
@@ -80,8 +61,7 @@ const startApp = () => {
   addPass(savePass)
   addPass(outputPass)
 
-  useTick(({ timestamp, timeDiff }) => {
-  })
+  useTick(({ timestamp, timeDiff }) => {})
 }
 
 export default startApp
