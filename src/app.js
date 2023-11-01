@@ -26,7 +26,7 @@ const startApp = () => {
   scene.add(dirLight, ambientLight)
 
   // meshes
-  const geometry = new THREE.SphereGeometry(1)
+  const geometry = new THREE.IcosahedronGeometry(1, 50)
   const material = new THREE.ShaderMaterial({
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
