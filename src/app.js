@@ -16,7 +16,7 @@ const startApp = () => {
   const { width, height } = useRenderSize()
 
   // settings
-  const MOTION_BLUR_AMOUNT = 0.725
+  const MOTION_BLUR_AMOUNT = 0.5
 
   // lighting
   const dirLight = new THREE.DirectionalLight('#ffffff', 0.75)
@@ -26,8 +26,11 @@ const startApp = () => {
   scene.add(dirLight, ambientLight)
 
   // meshes
-  const geometry = new THREE.IcosahedronGeometry(1, 5)
-  const material = new THREE.ShaderMaterial()
+  const geometry = new THREE.PlaneGeometry(1, 1)
+  const material = new THREE.ShaderMaterial({
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+  })
 
   const ico = new THREE.Mesh(geometry, material)
   scene.add(ico)
