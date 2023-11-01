@@ -67,7 +67,7 @@ const startApp = () => {
   addPass(outputPass)
 
   useTick(({ timestamp, timeDiff }) => {
-    const time = timestamp / 1000
+    const time = timestamp / 10000
     material.uniforms.uTime.value = time
   })
 }
