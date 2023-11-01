@@ -42,7 +42,7 @@ const startApp = () => {
   cameraFolder.add(camera.position, 'z', 0, 10)
   cameraFolder.open()
 
-  gui.add(material.uniforms.uRadius, 'value')
+  gui.add(material.uniforms.uRadius, 'value').min(0).max(1)
 
   // postprocessing
   const renderTargetParameters = {
