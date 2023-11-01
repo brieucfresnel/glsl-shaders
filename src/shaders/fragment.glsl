@@ -86,5 +86,7 @@ float noise(vec3 P) {
 
 void main() {
 
-	gl_FragColor = vec4(vec3(noise(vPosition * 10.0)), 1);
+	vec4 color = texture2D(uTexture, vUv);
+
+	gl_FragColor = vec4(color.xyz, 1);
 }
