@@ -12,5 +12,9 @@ void main() {
 	// vec3(step(uRadius, length(uv)))
 	// fract(vUv.x * 10.0)
 	// step(0.5, mod(vUv.x * 10.0, 3.0))
-	gl_FragColor = vec4(vec3(mix(0.0, 0.1, vUv.x)), 1);
+	// mix(0.0, 0.1, vUv.x)
+
+	vec3 viewDirection = normalize(cameraPosition - vPosition);
+
+	gl_FragColor = vec4(viewDirection, 1);
 }
