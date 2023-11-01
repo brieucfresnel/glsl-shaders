@@ -32,6 +32,8 @@ const startApp = () => {
     fragmentShader: fragmentShader,
   })
 
+  material.uniforms.uRadius = { value: 0.5 }
+
   const ico = new THREE.Mesh(geometry, material)
   scene.add(ico)
 
@@ -39,6 +41,8 @@ const startApp = () => {
   const cameraFolder = gui.addFolder('Camera')
   cameraFolder.add(camera.position, 'z', 0, 10)
   cameraFolder.open()
+
+  gui.add(material.uniforms.uRadius, 'value')
 
   // postprocessing
   const renderTargetParameters = {
