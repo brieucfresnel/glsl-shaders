@@ -15,6 +15,7 @@ void main() {
 	// mix(0.0, 0.1, vUv.x)
 
 	vec3 viewDirection = normalize(cameraPosition - vPosition);
+	float fresnel = 1.0 - dot(viewDirection, vNormal);
 
-	gl_FragColor = vec4(viewDirection, 1);
+	gl_FragColor = vec4(vec3(fresnel), 1);
 }
