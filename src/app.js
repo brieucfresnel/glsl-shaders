@@ -9,8 +9,6 @@ import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js'
 import vertexShader from './shaders/vertex.glsl'
 import fragmentShader from './shaders/fragment.glsl'
 
-import colorBg from './images/color-bg.jpg'
-
 const startApp = () => {
   const scene = useScene()
   const camera = useCamera()
@@ -28,15 +26,13 @@ const startApp = () => {
   scene.add(dirLight, ambientLight)
 
   // meshes
-  const geometry = new THREE.PlaneGeometry(1, 1)
+  const geometry = new THREE.SphereGeometry(1)
   const material = new THREE.ShaderMaterial({
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
   })
 
   material.uniforms.uTime = { value: 0 }
-  material.uniforms.uRadius = { value: 0.5 }
-  material.uniforms.uTexture = { value: new THREE.TextureLoader().load(colorBg) }
 
   const ico = new THREE.Mesh(geometry, material)
   scene.add(ico)
@@ -45,8 +41,6 @@ const startApp = () => {
   const cameraFolder = gui.addFolder('Camera')
   cameraFolder.add(camera.position, 'z', 0, 10)
   cameraFolder.open()
-
-  gui.add(material.uniforms.uRadius, 'value').min(0).max(1)
 
   // postprocessing
   const renderTargetParameters = {
@@ -72,7 +66,10 @@ const startApp = () => {
   addPass(savePass)
   addPass(outputPass)
 
-  useTick(({ timestamp, timeDiff }) => {})
+  useTick(({ timestamp, timeDiff }) => {
+    const time = timestamp / 1000
+    material.uniforms.uTime.value = time
+  })
 }
 
 export default startApp
