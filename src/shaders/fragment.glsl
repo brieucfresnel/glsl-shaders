@@ -12,5 +12,5 @@ void main() {
 	// vec3(step(uRadius, length(uv)))
 	// fract(vUv.x * 10.0)
 	// step(0.5, mod(vUv.x * 10.0, 3.0))
-	gl_FragColor = vec4(vec3(step(0.5, fract(vUv.x * 10.0))), 1);
+	gl_FragColor = vec4(vec3(mix(0.0, 0.1, vUv.x)), 1);
 }
