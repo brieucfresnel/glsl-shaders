@@ -7,11 +7,16 @@ import { BlendShader } from 'three/examples/jsm/shaders/BlendShader.js'
 import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 
+// import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader.js'
+// import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+
 import vertexPars from './shaders/vertex_pars.glsl'
 import vertexMain from './shaders/vertex_main.glsl'
 
 import fragmentPars from './shaders/fragment_pars.glsl'
 import fragmentMain from './shaders/fragment_main.glsl'
+
+import bgGradientNoise from './images/bg-gradient-noise.png'
 
 const startApp = () => {
   const scene = useScene()
@@ -19,18 +24,31 @@ const startApp = () => {
   const gui = useGui()
   const { width, height } = useRenderSize()
 
+  const showHelpers = false
+
   // settings
   const MOTION_BLUR_AMOUNT = 0.5
 
   // lighting
-  const dirLight = new THREE.DirectionalLight('#526cff', 0.6)
+  const dirLight = new THREE.DirectionalLight('#526cff', 0.5)
   dirLight.position.set(2, 2, 2)
 
   const dirLight2 = new THREE.DirectionalLight('#D73737', 0.6)
   dirLight2.position.set(-2, -2, -2)
 
-  const ambientLight = new THREE.AmbientLight('#D73737', 0.5)
+  const ambientLight = new THREE.AmbientLight('#4255FF', 0.6)
   scene.add(dirLight, dirLight2, ambientLight)
+
+  if (showHelpers) {
+    const dirLight1helper = new THREE.DirectionalLightHelper(dirLight)
+    scene.add(dirLight1helper)
+
+    const dirLight2helper = new THREE.DirectionalLightHelper(dirLight2)
+    scene.add(dirLight2helper)
+
+    const gridHelper = new THREE.GridHelper(5, 5)
+    scene.add(gridHelper)
+  }
 
   // meshes
   const geometry = new THREE.IcosahedronGeometry(1, 300)
@@ -68,6 +86,9 @@ const startApp = () => {
 
   const ico = new THREE.Mesh(geometry, material)
   scene.add(ico)
+
+  const noisyGradientTexture = new THREE.TextureLoader().load(bgGradientNoise)
+  scene.background = noisyGradientTexture
 
   // GUI
   const cameraFolder = gui.addFolder('Camera')
