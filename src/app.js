@@ -6,8 +6,8 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { BlendShader } from 'three/examples/jsm/shaders/BlendShader.js'
 import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js'
 
-import vertexShader from './shaders/vertex.glsl'
-import fragmentShader from './shaders/fragment.glsl'
+import vertexPars from './shaders/vertex_pars.glsl'
+import vertexMain from './shaders/vertex_main.glsl'
 
 const startApp = () => {
   const scene = useScene()
@@ -26,13 +26,27 @@ const startApp = () => {
   scene.add(dirLight, ambientLight)
 
   // meshes
-  const geometry = new THREE.IcosahedronGeometry(1, 50)
-  const material = new THREE.ShaderMaterial({
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-  })
+  const geometry = new THREE.IcosahedronGeometry(1, 100)
+  const material = new THREE.MeshStandardMaterial({
+    onBeforeCompile: (shader) => {
+      material.userData.shader = shader
+      // uniforms
+      shader.uniforms.uTime = { value: 0 }
 
-  material.uniforms.uTime = { value: 0 }
+      const parsVertexString = /* glsl */ `#include <displacementmap_pars_vertex>`
+      shader.vertexShader = shader.vertexShader.replace(
+        parsVertexString,
+        parsVertexString + '\n' + vertexPars
+      )
+
+      const mainVertexString = /* glsl */ `#include <displacementmap_vertex>`
+      shader.vertexShader = shader.vertexShader.replace(
+        mainVertexString,
+        mainVertexString + '\n' + vertexMain
+      )
+      console.log(shader.vertexShader)
+    },
+  })
 
   const ico = new THREE.Mesh(geometry, material)
   scene.add(ico)
@@ -68,7 +82,7 @@ const startApp = () => {
 
   useTick(({ timestamp, timeDiff }) => {
     const time = timestamp / 10000
-    material.uniforms.uTime.value = time
+    material.userData.shader.uniforms.uTime.value = time
   })
 }
 
