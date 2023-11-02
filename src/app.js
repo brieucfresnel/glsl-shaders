@@ -5,9 +5,13 @@ import { SavePass } from 'three/examples/jsm/postprocessing/SavePass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { BlendShader } from 'three/examples/jsm/shaders/BlendShader.js'
 import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 
 import vertexPars from './shaders/vertex_pars.glsl'
 import vertexMain from './shaders/vertex_main.glsl'
+
+import fragmentPars from './shaders/fragment_pars.glsl'
+import fragmentMain from './shaders/fragment_main.glsl'
 
 const startApp = () => {
   const scene = useScene()
@@ -19,14 +23,14 @@ const startApp = () => {
   const MOTION_BLUR_AMOUNT = 0.5
 
   // lighting
-  const dirLight = new THREE.DirectionalLight('#ffffff', 0.75)
-  dirLight.position.set(5, 5, 5)
+  const dirLight = new THREE.DirectionalLight('#526cff', 0.6)
+  dirLight.position.set(2, 2, 2)
 
-  const ambientLight = new THREE.AmbientLight('#ffffff', 0.2)
+  const ambientLight = new THREE.AmbientLight('#4255ff', 0.5)
   scene.add(dirLight, ambientLight)
 
   // meshes
-  const geometry = new THREE.IcosahedronGeometry(1, 100)
+  const geometry = new THREE.IcosahedronGeometry(1, 300)
   const material = new THREE.MeshStandardMaterial({
     onBeforeCompile: (shader) => {
       material.userData.shader = shader
@@ -44,7 +48,18 @@ const startApp = () => {
         mainVertexString,
         mainVertexString + '\n' + vertexMain
       )
-      console.log(shader.vertexShader)
+
+      const parsFragmentString = /* glsl */ `#include <bumpmap_pars_fragment>`
+      shader.fragmentShader = shader.fragmentShader.replace(
+        parsFragmentString,
+        parsFragmentString + '\n' + fragmentPars
+      )
+
+      const mainFragmentString = /* glsl */ `#include <normal_fragment_maps>`
+      shader.fragmentShader = shader.fragmentShader.replace(
+        mainFragmentString,
+        mainFragmentString + '\n' + fragmentMain
+      )
     },
   })
 
@@ -79,6 +94,8 @@ const startApp = () => {
   addPass(blendPass)
   addPass(savePass)
   addPass(outputPass)
+
+  addPass(new UnrealBloomPass(new THREE.Vector2(width, height), 0.7, 0.4, 0.4))
 
   useTick(({ timestamp, timeDiff }) => {
     const time = timestamp / 10000
