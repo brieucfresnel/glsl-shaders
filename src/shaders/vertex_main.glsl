@@ -1,6 +1,6 @@
 vec3 coords = normal;
 coords.y += uTime;
-vec3 noisePattern = vec3(noise(coords / 1.5));
+vec3 noisePattern = vec3(noise(coords / 1.2));
 float pattern = wave(noisePattern + uTime);
 
 // varyings

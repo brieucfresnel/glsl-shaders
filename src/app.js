@@ -26,8 +26,11 @@ const startApp = () => {
   const dirLight = new THREE.DirectionalLight('#526cff', 0.6)
   dirLight.position.set(2, 2, 2)
 
-  const ambientLight = new THREE.AmbientLight('#4255ff', 0.5)
-  scene.add(dirLight, ambientLight)
+  const dirLight2 = new THREE.DirectionalLight('#D73737', 0.6)
+  dirLight2.position.set(-2, -2, -2)
+
+  const ambientLight = new THREE.AmbientLight('#D73737', 0.5)
+  scene.add(dirLight, dirLight2, ambientLight)
 
   // meshes
   const geometry = new THREE.IcosahedronGeometry(1, 300)
